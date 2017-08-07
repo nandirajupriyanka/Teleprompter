@@ -2,6 +2,9 @@ package com.priyankanandiraju.teleprompter.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.v7.preference.PreferenceManager;
+
+import com.priyankanandiraju.teleprompter.R;
 
 /**
  * Created by priyankanandiraju on 8/3/17.
@@ -10,42 +13,40 @@ import android.content.SharedPreferences;
 public class SharedPref {
 
     private static final String PREF_NAME = "1000000";
-    private static final String KEY_SPEED = "KEY_SPEED";
-    private static final String KEY_TEXT_COLOR = "KEY_TEXT_COLOR";
-    private static final String KEY_TEXT_SIZE = "KEY_TEXT_SIZE";
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
+    private Context mContext;
 
     public SharedPref(Context context) {
-        sharedPreferences  = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        editor = sharedPreferences.edit();
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        mContext = context;
     }
 
     public void setSpeed(int speed) {
-        editor.putInt(KEY_SPEED, speed);
+        editor.putInt(mContext.getString(R.string.KEY_SPEED), speed);
         editor.commit();
     }
 
-    public int getSpeed(int defaultValue) {
-        return sharedPreferences.getInt(KEY_SPEED, defaultValue);
+    public String getSpeed() {
+        return sharedPreferences.getString(mContext.getString(R.string.KEY_SPEED), mContext.getString(R.string.speed_10_value));
     }
 
     public void setTextColor(String textColor) {
-        editor.putString(KEY_TEXT_COLOR, textColor);
+        editor.putString(mContext.getString(R.string.KEY_TEXT_COLOR), textColor);
         editor.commit();
     }
 
-    public String getTextColor(String defaultTextColor) {
-        return sharedPreferences.getString(KEY_TEXT_COLOR, defaultTextColor);
+    public String getTextColor() {
+        return sharedPreferences.getString(mContext.getString(R.string.KEY_TEXT_COLOR), mContext.getString(R.string.text_color_black_value));
     }
 
     public void setTextSize(int size) {
-        editor.putInt(KEY_TEXT_COLOR, size);
+        editor.putInt(mContext.getString(R.string.KEY_TEXT_SIZE), size);
         editor.commit();
     }
 
-    public int getTextSize(int defaultSize) {
-        return sharedPreferences.getInt(KEY_TEXT_SIZE, defaultSize);
+    public String getTextSize() {
+        return sharedPreferences.getString(mContext.getString(R.string.KEY_TEXT_SIZE), mContext.getString(R.string.text_size_small_value));
     }
 
 

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <ListPreference android:title="@string/speed"
+        android:summary="@string/speed_desc"
+        android:key="@string/KEY_SPEED"
+        android:defaultValue="1"
+        android:entries="@array/speedEntries"
+        android:entryValues="@array/speedValues"/>
+
+    <ListPreference android:title="@string/text_color"
+        android:summary="@string/text_color_desc"
+        android:key="@string/KEY_TEXT_COLOR"
+        android:defaultValue="1"
+        android:entries="@array/textColorEntries"
+        android:entryValues="@array/textColorValues"/>
+
+    <ListPreference android:title="@string/text_size"
+        android:summary="@string/text_size_desc"
+        android:key="@string/KEY_TEXT_SIZE"
+        android:defaultValue="1"
+        android:entries="@array/textSizeEntries"
+        android:entryValues="@array/textSizeValues"/>
+</PreferenceScreen>
