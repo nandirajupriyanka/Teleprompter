@@ -31,7 +31,8 @@ public class MainActivity extends AppCompatActivity {
         fabButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: 8/7/17
+                Intent intent = new Intent(MainActivity.this, AddFileActivity.class);
+                startActivity(intent);
             }
         });
     }
