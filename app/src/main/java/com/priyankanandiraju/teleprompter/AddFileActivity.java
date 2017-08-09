@@ -91,8 +91,6 @@ public class AddFileActivity extends AppCompatActivity implements View.OnClickLi
             }
         };
 
-        // Save this movie as favourite
-        //int movieId = Integer.parseInt(mId);
         ContentValues contentValues = new ContentValues();
         contentValues.put(TeleprompterFileEvent.COLUMN_FILE_TITLE, title);
         contentValues.put(TeleprompterFileEvent.COLUMN_FILE_CONTENT, content);
