@@ -20,9 +20,15 @@ import butterknife.ButterKnife;
 class TeleprompterFilesAdapter extends RecyclerView.Adapter<TeleprompterFilesAdapter.TeleprompterFilesHolder> {
 
     private List<TeleprompterFile> mTeleprompterFileList;
+    private OnFileClickListener mOnFileClickListener;
 
-    public TeleprompterFilesAdapter(List<TeleprompterFile> teleprompterFiles) {
+    public interface OnFileClickListener {
+        void onFileClick(TeleprompterFile teleprompterFile);
+    }
+
+    public TeleprompterFilesAdapter(List<TeleprompterFile> teleprompterFiles, OnFileClickListener onFileClickListener) {
         mTeleprompterFileList = teleprompterFiles;
+        mOnFileClickListener = onFileClickListener;
     }
 
     @Override
@@ -46,9 +52,10 @@ class TeleprompterFilesAdapter extends RecyclerView.Adapter<TeleprompterFilesAda
     public void setFileData(List<TeleprompterFile> fileList) {
         mTeleprompterFileList.clear();
         mTeleprompterFileList.addAll(fileList);
+        notifyDataSetChanged();
     }
 
-    public class TeleprompterFilesHolder extends RecyclerView.ViewHolder {
+    public class TeleprompterFilesHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.tv_title)
         TextView tvTitle;
@@ -57,6 +64,15 @@ class TeleprompterFilesAdapter extends RecyclerView.Adapter<TeleprompterFilesAda
         public TeleprompterFilesHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            int adapterPosition = getAdapterPosition();
+            TeleprompterFile teleprompterFile = mTeleprompterFileList.get(adapterPosition);
+            mOnFileClickListener.onFileClick(teleprompterFile);
         }
     }
 }

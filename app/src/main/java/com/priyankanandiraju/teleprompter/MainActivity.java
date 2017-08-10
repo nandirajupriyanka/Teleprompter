@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,7 +29,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
+public class MainActivity extends AppCompatActivity implements TeleprompterFilesAdapter.OnFileClickListener, LoaderManager.LoaderCallbacks<Cursor>{
 
     private static final String TAG = MainActivity.class.getSimpleName();
     @BindView(R.id.fab)
@@ -58,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         rvTeleprompterFiles.setLayoutManager(new LinearLayoutManager(this));
 
-        mAdapter = new TeleprompterFilesAdapter(new ArrayList<TeleprompterFile>());
+        mAdapter = new TeleprompterFilesAdapter(new ArrayList<TeleprompterFile>(), this);
         rvTeleprompterFiles.setAdapter(mAdapter);
 
         fabButton.setOnClickListener(new View.OnClickListener() {
@@ -146,5 +147,10 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    @Override
+    public void onFileClick(TeleprompterFile teleprompterFile) {
+        Log.v(TAG, "onFileClick() " + teleprompterFile.toString());
     }
 }
