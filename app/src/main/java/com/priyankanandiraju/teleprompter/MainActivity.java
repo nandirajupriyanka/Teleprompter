@@ -32,6 +32,8 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity implements TeleprompterFilesAdapter.OnFileClickListener, LoaderManager.LoaderCallbacks<Cursor>{
 
     private static final String TAG = MainActivity.class.getSimpleName();
+    public static final String EXTRA_FILE_DATA = "EXTRA_FILE_DATA";
+
     @BindView(R.id.fab)
     FloatingActionButton fabButton;
     @BindView(R.id.toolbar)
@@ -152,5 +154,8 @@ public class MainActivity extends AppCompatActivity implements TeleprompterFiles
     @Override
     public void onFileClick(TeleprompterFile teleprompterFile) {
         Log.v(TAG, "onFileClick() " + teleprompterFile.toString());
+        Intent intent = new Intent(this, TeleprompterActivity.class);
+        intent.putExtra(EXTRA_FILE_DATA, teleprompterFile);
+        startActivity(intent);
     }
 }
