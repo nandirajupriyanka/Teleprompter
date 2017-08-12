@@ -55,4 +55,18 @@ public class TeleprompterView {
         return textSize;
     }
 
+    public int generateTextScrollSpeed(String newSpeedKey) {
+        int textScrollSpeed;
+
+        if (newSpeedKey.equals(mContext.getString(R.string.speed_30_value))) {
+            textScrollSpeed = 30;
+        } else if (newSpeedKey.equals(mContext.getString(R.string.speed_20_value))) {
+            textScrollSpeed = 20;
+        } else {
+            textScrollSpeed = 10;
+        }
+
+        return textScrollSpeed * 1000;
+    }
+
 }

@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.priyankanandiraju.teleprompter.TeleprompterActivity">
+    <item
+        android:id="@+id/action_play"
+        android:orderInCategory="100"
+        android:title="@string/play"
+        android:icon="@android:drawable/ic_media_play"
+        app:showAsAction="always" />
+</menu>

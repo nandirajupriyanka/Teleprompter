@@ -45,4 +45,5 @@
     <string name="file_icon">File Icon</string>
     <string name="failed_to_save_data">Failed to save data</string>
     <string name="saved_successfully">Saved successfully</string>
+    <string name="play">Play</string>
 </resources>
