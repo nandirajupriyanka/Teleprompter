@@ -28,8 +28,8 @@
         <item>@string/large</item>
     </string-array>
     <string-array name="textSizeValues">
-        <item>@string/small</item>
-        <item>@string/medium</item>
-        <item>@string/large</item>
+        <item>@string/text_size_small_value</item>
+        <item>@string/text_size_medium_value</item>
+        <item>@string/text_size_large_value</item>
     </string-array>
 </resources>
