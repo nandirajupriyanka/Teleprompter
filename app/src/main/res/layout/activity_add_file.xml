@@ -18,8 +18,8 @@
         <!-- TODO Remove src and create circular image view -->
         <ImageView
             android:id="@+id/iv_file_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:src="@mipmap/ic_launcher"
             android:contentDescription="@string/file_icon"/>
 

@@ -46,4 +46,7 @@
     <string name="failed_to_save_data">Failed to save data</string>
     <string name="saved_successfully">Saved successfully</string>
     <string name="play">Play</string>
+    <string name="select_picture">Select picture</string>
+    <string name="havent_picked_image">You haven\'t picked image yet.</string>
+    <string name="something_went_wrong">Oops! Something went wrong</string>
 </resources>

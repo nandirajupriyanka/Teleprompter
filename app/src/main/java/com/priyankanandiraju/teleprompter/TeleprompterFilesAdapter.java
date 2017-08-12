@@ -1,9 +1,15 @@
 package com.priyankanandiraju.teleprompter;
 
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.priyankanandiraju.teleprompter.utils.TeleprompterFile;
@@ -19,6 +25,7 @@ import butterknife.ButterKnife;
 
 class TeleprompterFilesAdapter extends RecyclerView.Adapter<TeleprompterFilesAdapter.TeleprompterFilesHolder> {
 
+    private static final String IMAGE_DATA = "IMAGE_DATA";
     private List<TeleprompterFile> mTeleprompterFileList;
     private OnFileClickListener mOnFileClickListener;
 
@@ -42,6 +49,16 @@ class TeleprompterFilesAdapter extends RecyclerView.Adapter<TeleprompterFilesAda
         TeleprompterFile currentFileData = mTeleprompterFileList.get(position);
         holder.tvTitle.setText(currentFileData.getTitle());
         holder.tvContent.setText(currentFileData.getContent());
+
+        SharedPreferences shre = PreferenceManager.getDefaultSharedPreferences(holder.ivFileIcon.getContext());
+        String previouslyEncodedImage = shre.getString(IMAGE_DATA + currentFileData.getTitle(), "");
+        if (!previouslyEncodedImage.equalsIgnoreCase("")) {
+            byte[] b = Base64.decode(previouslyEncodedImage, Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
+            holder.ivFileIcon.setImageBitmap(bitmap);
+        } else {
+            holder.ivFileIcon.setImageBitmap(null);
+        }
     }
 
     @Override
@@ -61,6 +78,9 @@ class TeleprompterFilesAdapter extends RecyclerView.Adapter<TeleprompterFilesAda
         TextView tvTitle;
         @BindView(R.id.tv_content)
         TextView tvContent;
+        @BindView(R.id.iv_file_icon)
+        ImageView ivFileIcon;
+
         public TeleprompterFilesHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
