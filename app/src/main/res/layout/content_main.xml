@@ -23,4 +23,13 @@
         android:layout_gravity="center"
         android:visibility="invisible" />
 
+    <TextView
+        android:id="@+id/tv_empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/no_files_added"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:visibility="gone"/>
+
 </RelativeLayout>

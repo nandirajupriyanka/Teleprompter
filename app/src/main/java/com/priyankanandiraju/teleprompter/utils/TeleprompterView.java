@@ -18,6 +18,19 @@ public class TeleprompterView {
         mContext = context;
     }
 
+    public int generateBgColor(String newBgColorKey) {
+
+        @ColorInt
+        int bgColor;
+
+        if (newBgColorKey.equals(mContext.getString(R.string.bg_color_black_value))) {
+            bgColor = android.R.color.black;
+        } else {
+            bgColor = android.R.color.white;
+        }
+        return bgColor;
+    }
+
     /**
      * Sets the color of the teleprompter text. This should be one of the preference color values
      *

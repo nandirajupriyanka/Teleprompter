@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.priyankanandiraju.teleprompter.data.TeleprompterFileContract.TeleprompterFileEvent;
@@ -44,6 +45,9 @@ public class MainActivity extends AppCompatActivity implements TeleprompterFiles
     RecyclerView rvTeleprompterFiles;
     @BindView(R.id.pb_loading_indicator)
     ProgressBar progressBar;
+    @BindView(R.id.tv_empty)
+    TextView tvEmpty;
+
     private TeleprompterFilesAdapter mAdapter;
 
     @Override
@@ -122,10 +126,10 @@ public class MainActivity extends AppCompatActivity implements TeleprompterFiles
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
         if (cursor == null || cursor.getCount() < 1) {
+            tvEmpty.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.INVISIBLE);
-            Toast.makeText(this, "No data", Toast.LENGTH_SHORT).show();
-            return;
         }
+        tvEmpty.setVisibility(View.GONE);
         List<TeleprompterFile> teleprompterFileList = new ArrayList<>();
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
             // TODO: 8/8/17 Image 

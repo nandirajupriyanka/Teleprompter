@@ -10,6 +10,14 @@
         <item>@string/speed_20_value</item>
         <item>@string/speed_30_value</item>
     </string-array>
+    <string-array name="bgColorEntries">
+        <item>@string/white</item>
+        <item>@string/black</item>
+    </string-array>
+    <string-array name="bgColorValues">
+        <item>@string/bg_color_white_value</item>
+        <item>@string/bg_color_black_value</item>
+    </string-array>
     <string-array name="textColorEntries">
         <item>@string/black</item>
         <item>@string/white</item>

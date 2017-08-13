@@ -51,22 +51,25 @@ public class TeleprompterActivity extends AppCompatActivity {
     }
 
     private void setupSharedPreferences() {
-        // TODO: 8/11/17 Speed
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String prefBgColor = sharedPreferences.getString(getString(R.string.KEY_BG_COLOR), getString(R.string.bg_color_white_value));
         String prefColor = sharedPreferences.getString(getString(R.string.KEY_TEXT_COLOR), getString(R.string.text_color_black_value));
         String prefSize = sharedPreferences.getString(getString(R.string.KEY_TEXT_SIZE), getString(R.string.text_size_small_value));
         String prefSpeed = sharedPreferences.getString(getString(R.string.KEY_SPEED), getString(R.string.speed_10_value));
 
         TeleprompterView teleprompterView = new TeleprompterView(this);
+        int bgColor = teleprompterView.generateBgColor(prefBgColor);
         int textColor = teleprompterView.generateTextColor(prefColor);
         int textSize = teleprompterView.generateTextSize(prefSize);
         scrollSpeed = teleprompterView.generateTextScrollSpeed(prefSpeed);
 
+        bgColor = ContextCompat.getColor(this, bgColor);
         textColor = ContextCompat.getColor(this, textColor);
+
+        scrollView.setBackgroundColor(bgColor);
         tvContent.setTextColor(textColor);
         tvContent.setTextSize(textSize);
         tvContent.setText(mTeleprompterFile.getContent());
-
     }
 
     @Override

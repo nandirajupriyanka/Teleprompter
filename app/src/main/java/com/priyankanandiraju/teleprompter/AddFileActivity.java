@@ -89,6 +89,7 @@ public class AddFileActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.btn_save:
                 if (btnSave.isEnabled()) {
                     saveDataToDb();
+                    finish();
                 }
                 break;
             case R.id.btn_cancel:

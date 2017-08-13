@@ -7,6 +7,13 @@
         android:entries="@array/speedEntries"
         android:entryValues="@array/speedValues"/>
 
+    <ListPreference android:title="@string/bg_color"
+        android:summary="@string/bg_color_desc"
+        android:key="@string/KEY_BG_COLOR"
+        android:defaultValue="1"
+        android:entries="@array/bgColorEntries"
+        android:entryValues="@array/bgColorValues"/>
+
     <ListPreference android:title="@string/text_color"
         android:summary="@string/text_color_desc"
         android:key="@string/KEY_TEXT_COLOR"
