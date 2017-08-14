@@ -15,12 +15,13 @@
         android:paddingBottom="8dp"
         android:gravity="center">
 
-        <!-- TODO Remove src and create circular image view -->
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_file_icon"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:src="@mipmap/ic_launcher"
+            android:src="@android:drawable/ic_menu_camera"
+            app:civ_border_width="1dp"
+            app:civ_border_color="@android:color/white"
             android:contentDescription="@string/file_icon"/>
 
         <EditText

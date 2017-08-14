@@ -95,7 +95,7 @@ public class AddFileActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.btn_cancel:
                 etTitle.setText("");
                 etContent.setText("");
-                // TODO: 8/8/17 Set ImageView
+                ivFileIcon.setImageResource(android.R.drawable.ic_menu_camera);
                 break;
         }
     }
@@ -155,7 +155,7 @@ public class AddFileActivity extends AppCompatActivity implements View.OnClickLi
         ContentValues contentValues = new ContentValues();
         contentValues.put(TeleprompterFileEvent.COLUMN_FILE_TITLE, title);
         contentValues.put(TeleprompterFileEvent.COLUMN_FILE_CONTENT, content);
-        contentValues.put(TeleprompterFileEvent.COLUMN_FILE_IMAGE, R.mipmap.ic_launcher);
+        contentValues.put(TeleprompterFileEvent.COLUMN_FILE_IMAGE, android.R.drawable.ic_menu_camera);
 
         asyncQueryHandler.startInsert(1, null, TeleprompterFileEvent.CONTENT_URI, contentValues);
     }

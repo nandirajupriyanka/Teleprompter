@@ -128,11 +128,11 @@ public class MainActivity extends AppCompatActivity implements TeleprompterFiles
         if (cursor == null || cursor.getCount() < 1) {
             tvEmpty.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.INVISIBLE);
+            return;
         }
         tvEmpty.setVisibility(View.GONE);
         List<TeleprompterFile> teleprompterFileList = new ArrayList<>();
         for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-            // TODO: 8/8/17 Image 
             // The Cursor is now set to the right position
             int titleColumnIndex = cursor.getColumnIndex(TeleprompterFileEvent.COLUMN_FILE_TITLE);
             int contentColumnIndex = cursor.getColumnIndex(TeleprompterFileEvent.COLUMN_FILE_CONTENT);
