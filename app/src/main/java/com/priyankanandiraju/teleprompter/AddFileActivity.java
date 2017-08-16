@@ -1,6 +1,5 @@
 package com.priyankanandiraju.teleprompter;
 
-import android.content.AsyncQueryHandler;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,19 +24,18 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.priyankanandiraju.teleprompter.data.TeleprompterFileContract.TeleprompterFileEvent;
-import com.priyankanandiraju.teleprompter.utils.SharedPref;
+import com.priyankanandiraju.teleprompter.utils.QueryHandler;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileDescriptor;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class AddFileActivity extends AppCompatActivity implements View.OnClickListener, TextWatcher {
+public class AddFileActivity extends AppCompatActivity implements View.OnClickListener, TextWatcher, QueryHandler.onQueryHandlerInsertComplete {
 
     private static final String IMAGE_DATA = "IMAGE_DATA";
     @BindView(R.id.iv_file_icon)
@@ -138,26 +136,15 @@ public class AddFileActivity extends AppCompatActivity implements View.OnClickLi
     private void saveDataToDb() {
         final String title = etTitle.getText().toString();
         String content = etContent.getText().toString();
-        AsyncQueryHandler asyncQueryHandler = new AsyncQueryHandler(getContentResolver()) {
-            @Override
-            protected void onInsertComplete(int token, Object cookie, Uri uri) {
-                if (uri == null) {
-                    Toast.makeText(AddFileActivity.this, R.string.failed_to_save_data, Toast.LENGTH_SHORT).show();
-                } else {
-                    if (bitmap != null) {
-                        saveImageBitmap(bitmap, title);
-                    }
-                    Toast.makeText(AddFileActivity.this, R.string.saved_successfully, Toast.LENGTH_SHORT).show();
-                }
-            }
-        };
+
+        QueryHandler queryHandler = new QueryHandler(getContentResolver(), AddFileActivity.this);
 
         ContentValues contentValues = new ContentValues();
         contentValues.put(TeleprompterFileEvent.COLUMN_FILE_TITLE, title);
         contentValues.put(TeleprompterFileEvent.COLUMN_FILE_CONTENT, content);
         contentValues.put(TeleprompterFileEvent.COLUMN_FILE_IMAGE, android.R.drawable.ic_menu_camera);
 
-        asyncQueryHandler.startInsert(1, null, TeleprompterFileEvent.CONTENT_URI, contentValues);
+        queryHandler.startInsert(1, null, TeleprompterFileEvent.CONTENT_URI, contentValues);
     }
 
     private Bitmap saveImageBitmap(Bitmap thumbnail, String nameString) {
@@ -213,6 +200,19 @@ public class AddFileActivity extends AppCompatActivity implements View.OnClickLi
             btnSave.setEnabled(false);
         } else {
             btnSave.setEnabled(true);
+        }
+    }
+
+    @Override
+    public void onInsertComplete(int token, Object cookie, Uri uri) {
+        final String title = etTitle.getText().toString();
+        if (uri == null) {
+            Toast.makeText(AddFileActivity.this, R.string.failed_to_save_data, Toast.LENGTH_SHORT).show();
+        } else {
+            if (bitmap != null) {
+                saveImageBitmap(bitmap, title);
+            }
+            Toast.makeText(AddFileActivity.this, R.string.saved_successfully, Toast.LENGTH_SHORT).show();
         }
     }
 }
