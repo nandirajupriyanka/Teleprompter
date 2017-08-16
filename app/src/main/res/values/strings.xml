@@ -60,5 +60,6 @@
     <string name="something_went_wrong">Oops! Something went wrong</string>
     <string name="no_files_added">No files added</string>
     <string name="banner_ad_unit_id">ca-app-pub-7180764529818538/5546539377</string>
+    <string name="interstitial_ad_unit_id">ca-app-pub-7180764529818538/7408261861</string>
 
 </resources>

@@ -20,8 +20,10 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 import com.priyankanandiraju.teleprompter.data.TeleprompterFileContract.TeleprompterFileEvent;
 import com.priyankanandiraju.teleprompter.utils.TeleprompterFile;
 
@@ -50,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements TeleprompterFiles
     TextView tvEmpty;
 
     private TeleprompterFilesAdapter mAdapter;
+    private InterstitialAd mInterstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,12 +72,18 @@ public class MainActivity extends AppCompatActivity implements TeleprompterFiles
         mAdapter = new TeleprompterFilesAdapter(new ArrayList<TeleprompterFile>(), this);
         rvTeleprompterFiles.setAdapter(mAdapter);
 
+        // Admob banner
         AdView adView = findViewById(R.id.adView);
 
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .build();
         adView.loadAd(adRequest);
+
+        // Admob InterstitialAd
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId(getString(R.string.interstitial_ad_unit_id));
+        loadNewInterstitialAd();
 
         fabButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,6 +94,10 @@ public class MainActivity extends AppCompatActivity implements TeleprompterFiles
         });
 
         getLoaderManager().initLoader(0, null, MainActivity.this);
+    }
+
+    private void loadNewInterstitialAd() {
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
     }
 
     @Override
@@ -164,8 +177,26 @@ public class MainActivity extends AppCompatActivity implements TeleprompterFiles
     }
 
     @Override
-    public void onFileClick(TeleprompterFile teleprompterFile) {
+    public void onFileClick(final TeleprompterFile teleprompterFile) {
         Log.v(TAG, "onFileClick() " + teleprompterFile.toString());
+        if (mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+        } else {
+            Log.w("TAG", "The interstitial wasn't loaded yet.");
+            startTeleprompterActivity(teleprompterFile);
+        }
+
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                // Load the next interstitial.
+                loadNewInterstitialAd();
+                startTeleprompterActivity(teleprompterFile);
+            }
+        });
+    }
+
+    private void startTeleprompterActivity(final TeleprompterFile teleprompterFile) {
         Intent intent = new Intent(this, TeleprompterActivity.class);
         intent.putExtra(EXTRA_FILE_DATA, teleprompterFile);
         startActivity(intent);
