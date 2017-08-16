@@ -19,8 +19,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.priyankanandiraju.teleprompter.data.TeleprompterFileContract.TeleprompterFileEvent;
 import com.priyankanandiraju.teleprompter.utils.TeleprompterFile;
 
@@ -67,6 +68,13 @@ public class MainActivity extends AppCompatActivity implements TeleprompterFiles
 
         mAdapter = new TeleprompterFilesAdapter(new ArrayList<TeleprompterFile>(), this);
         rvTeleprompterFiles.setAdapter(mAdapter);
+
+        AdView adView = findViewById(R.id.adView);
+
+        AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
+                .build();
+        adView.loadAd(adRequest);
 
         fabButton.setOnClickListener(new View.OnClickListener() {
             @Override

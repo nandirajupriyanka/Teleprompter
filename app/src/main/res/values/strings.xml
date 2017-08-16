@@ -59,5 +59,6 @@
     <string name="havent_picked_image">You haven\'t picked image yet.</string>
     <string name="something_went_wrong">Oops! Something went wrong</string>
     <string name="no_files_added">No files added</string>
+    <string name="banner_ad_unit_id">ca-app-pub-7180764529818538/5546539377</string>
 
 </resources>
