@@ -4,12 +4,15 @@ import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -24,6 +27,7 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
+import com.google.gson.Gson;
 import com.priyankanandiraju.teleprompter.data.TeleprompterFileContract.TeleprompterFileEvent;
 import com.priyankanandiraju.teleprompter.utils.TeleprompterFile;
 
@@ -169,6 +173,20 @@ public class MainActivity extends AppCompatActivity implements TeleprompterFiles
         }
         progressBar.setVisibility(View.INVISIBLE);
         mAdapter.setFileData(teleprompterFileList);
+
+        getInitialItemForWidget(teleprompterFileList);
+    }
+
+    private void getInitialItemForWidget(@Nullable List<TeleprompterFile> teleprompterFileList) {
+        if (teleprompterFileList != null && !teleprompterFileList.isEmpty()) {
+            TeleprompterFile teleprompterFile = teleprompterFileList.get(0);
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            Gson gson = new Gson();
+            String teleprompterFileData = gson.toJson(teleprompterFile);
+            editor.putString("SHARED_PREF_FILE", teleprompterFileData);
+            editor.commit();
+        }
     }
 
     @Override
