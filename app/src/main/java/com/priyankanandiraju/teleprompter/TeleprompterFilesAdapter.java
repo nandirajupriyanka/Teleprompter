@@ -19,13 +19,14 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.priyankanandiraju.teleprompter.utils.Constants.IMAGE_DATA;
+
 /**
  * Created by priyankanandiraju on 8/8/17.
  */
 
 class TeleprompterFilesAdapter extends RecyclerView.Adapter<TeleprompterFilesAdapter.TeleprompterFilesHolder> {
 
-    private static final String IMAGE_DATA = "IMAGE_DATA";
     private List<TeleprompterFile> mTeleprompterFileList;
     private OnFileClickListener mOnFileClickListener;
 

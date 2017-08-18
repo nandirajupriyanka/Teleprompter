@@ -37,10 +37,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.priyankanandiraju.teleprompter.utils.Constants.EXTRA_FILE_DATA;
+import static com.priyankanandiraju.teleprompter.utils.Constants.SHARED_PREF_FILE;
+
 public class MainActivity extends AppCompatActivity implements TeleprompterFilesAdapter.OnFileClickListener, LoaderManager.LoaderCallbacks<Cursor>{
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    public static final String EXTRA_FILE_DATA = "EXTRA_FILE_DATA";
 
     @BindView(R.id.fab)
     FloatingActionButton fabButton;
@@ -184,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements TeleprompterFiles
             SharedPreferences.Editor editor = sharedPreferences.edit();
             Gson gson = new Gson();
             String teleprompterFileData = gson.toJson(teleprompterFile);
-            editor.putString("SHARED_PREF_FILE", teleprompterFileData);
+            editor.putString(SHARED_PREF_FILE, teleprompterFileData);
             editor.commit();
         }
     }
@@ -200,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements TeleprompterFiles
         if (mInterstitialAd.isLoaded()) {
             mInterstitialAd.show();
         } else {
-            Log.w("TAG", "The interstitial wasn't loaded yet.");
+            Log.w(TAG, "The interstitial wasn't loaded yet.");
             startTeleprompterActivity(teleprompterFile);
         }
 

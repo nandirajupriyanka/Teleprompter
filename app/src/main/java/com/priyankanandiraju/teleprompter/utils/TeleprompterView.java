@@ -2,7 +2,6 @@ package com.priyankanandiraju.teleprompter.utils;
 
 import android.content.Context;
 import android.support.annotation.ColorInt;
-import android.support.v4.content.ContextCompat;
 
 import com.priyankanandiraju.teleprompter.R;
 

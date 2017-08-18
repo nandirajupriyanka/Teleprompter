@@ -8,6 +8,17 @@ import android.os.Parcelable;
  */
 
 public class TeleprompterFile implements Parcelable {
+    public static final Creator<TeleprompterFile> CREATOR = new Creator<TeleprompterFile>() {
+        @Override
+        public TeleprompterFile createFromParcel(Parcel in) {
+            return new TeleprompterFile(in);
+        }
+
+        @Override
+        public TeleprompterFile[] newArray(int size) {
+            return new TeleprompterFile[size];
+        }
+    };
     private String title;
     private String content;
 
@@ -29,18 +40,6 @@ public class TeleprompterFile implements Parcelable {
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<TeleprompterFile> CREATOR = new Creator<TeleprompterFile>() {
-        @Override
-        public TeleprompterFile createFromParcel(Parcel in) {
-            return new TeleprompterFile(in);
-        }
-
-        @Override
-        public TeleprompterFile[] newArray(int size) {
-            return new TeleprompterFile[size];
-        }
-    };
 
     public String getTitle() {
         return title;

@@ -20,7 +20,7 @@ import com.priyankanandiraju.teleprompter.utils.TeleprompterView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.priyankanandiraju.teleprompter.MainActivity.EXTRA_FILE_DATA;
+import static com.priyankanandiraju.teleprompter.utils.Constants.EXTRA_FILE_DATA;
 
 public class TeleprompterActivity extends AppCompatActivity {
 

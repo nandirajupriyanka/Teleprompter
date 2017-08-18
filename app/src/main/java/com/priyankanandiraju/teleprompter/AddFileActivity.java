@@ -35,9 +35,11 @@ import java.io.IOException;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.priyankanandiraju.teleprompter.utils.Constants.IMAGE_DATA;
+
 public class AddFileActivity extends AppCompatActivity implements View.OnClickListener, TextWatcher, QueryHandler.onQueryHandlerInsertComplete {
 
-    private static final String IMAGE_DATA = "IMAGE_DATA";
+
     @BindView(R.id.iv_file_icon)
     ImageView ivFileIcon;
     @BindView(R.id.et_title)

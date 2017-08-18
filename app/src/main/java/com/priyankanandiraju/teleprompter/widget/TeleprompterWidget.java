@@ -14,13 +14,17 @@ import android.widget.RemoteViews;
 
 import com.google.gson.Gson;
 import com.priyankanandiraju.teleprompter.R;
-import com.priyankanandiraju.teleprompter.utils.SharedPref;
 import com.priyankanandiraju.teleprompter.utils.TeleprompterFile;
+
+import static com.priyankanandiraju.teleprompter.utils.Constants.IMAGE_DATA;
+import static com.priyankanandiraju.teleprompter.utils.Constants.SHARED_PREF_FILE;
 
 /**
  * Implementation of App Widget functionality.
  */
 public class TeleprompterWidget extends AppWidgetProvider {
+
+    private static final String TAG = TeleprompterWidget.class.getSimpleName();
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
@@ -33,17 +37,17 @@ public class TeleprompterWidget extends AppWidgetProvider {
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 
-        if (sharedPref.contains("SHARED_PREF_FILE")) {
+        if (sharedPref.contains(SHARED_PREF_FILE)) {
             views.setViewVisibility(R.id.ll_content, View.VISIBLE);
             views.setViewVisibility(R.id.tv_empty, View.GONE);
 
-            String jsonPrefFile = sharedPref.getString("SHARED_PREF_FILE", null);
+            String jsonPrefFile = sharedPref.getString(SHARED_PREF_FILE, null);
             Gson gson = new Gson();
             TeleprompterFile teleprompterFile = gson.fromJson(jsonPrefFile, TeleprompterFile.class);
             views.setTextViewText(R.id.file_title, teleprompterFile.getTitle());
             views.setTextViewText(R.id.file_content, teleprompterFile.getContent());
 
-            String imageFileName = "IMAGE_DATA" + teleprompterFile.getTitle();
+            String imageFileName = IMAGE_DATA + teleprompterFile.getTitle();
             if (sharedPref.contains(imageFileName)) {
                 String previouslyEncodedImage = sharedPref.getString(imageFileName, "");
                 if (!previouslyEncodedImage.equalsIgnoreCase("")) {
@@ -55,7 +59,7 @@ public class TeleprompterWidget extends AppWidgetProvider {
                 }
             }
         } else {
-            Log.v("TAG", "No data");
+            Log.v(TAG, "No data");
             views.setViewVisibility(R.id.ll_content, View.GONE);
             views.setViewVisibility(R.id.tv_empty, View.VISIBLE);
         }

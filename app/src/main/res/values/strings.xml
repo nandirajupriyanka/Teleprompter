@@ -51,7 +51,7 @@
     <string name="enter_content_here">Enter content here</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
-    <string name="file_icon">File Icon</string>
+    <string name="select_file_icon">Select File Icon</string>
     <string name="failed_to_save_data">Failed to save data</string>
     <string name="saved_successfully">Saved successfully</string>
     <string name="play">Play</string>
@@ -59,8 +59,12 @@
     <string name="havent_picked_image">You haven\'t picked image yet.</string>
     <string name="something_went_wrong">Oops! Something went wrong</string>
     <string name="no_files_added">No files added</string>
+    <string name="add_widget">Add widget</string>
+    <string name="file_icon">File icon</string>
+    <string name="title">Title</string>
+    <string name="content">Content</string>
+
+
     <string name="banner_ad_unit_id">ca-app-pub-7180764529818538/5546539377</string>
     <string name="interstitial_ad_unit_id">ca-app-pub-7180764529818538/7408261861</string>
-    <string name="add_widget">Add widget</string>
-
 </resources>
