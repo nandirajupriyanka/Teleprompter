@@ -13,6 +13,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -29,6 +30,7 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.gson.Gson;
 import com.priyankanandiraju.teleprompter.data.TeleprompterFileContract.TeleprompterFileEvent;
+import com.priyankanandiraju.teleprompter.helper.DeviceConfig;
 import com.priyankanandiraju.teleprompter.utils.TeleprompterFile;
 
 import java.util.ArrayList;
@@ -73,7 +75,14 @@ public class MainActivity extends AppCompatActivity implements TeleprompterFiles
 
         progressBar.setVisibility(View.VISIBLE);
 
-        rvTeleprompterFiles.setLayoutManager(new LinearLayoutManager(this));
+        RecyclerView.LayoutManager layoutManager;
+        if (DeviceConfig.getInstance().isTablet()) {
+            layoutManager = new GridLayoutManager(this, 3);
+        } else {
+            layoutManager = new LinearLayoutManager(this);
+        }
+
+        rvTeleprompterFiles.setLayoutManager(layoutManager);
 
         mAdapter = new TeleprompterFilesAdapter(new ArrayList<TeleprompterFile>(), this);
         rvTeleprompterFiles.setAdapter(mAdapter);
