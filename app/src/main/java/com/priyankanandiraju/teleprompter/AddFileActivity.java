@@ -23,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.priyankanandiraju.teleprompter.analytics.Analytics;
 import com.priyankanandiraju.teleprompter.data.TeleprompterFileContract.TeleprompterFileEvent;
 import com.priyankanandiraju.teleprompter.utils.QueryHandler;
 
@@ -35,10 +36,10 @@ import java.io.IOException;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.priyankanandiraju.teleprompter.analytics.AnalyticsConstant.*;
 import static com.priyankanandiraju.teleprompter.utils.Constants.IMAGE_DATA;
 
 public class AddFileActivity extends AppCompatActivity implements View.OnClickListener, TextWatcher, QueryHandler.onQueryHandlerInsertComplete {
-
 
     @BindView(R.id.iv_file_icon)
     ImageView ivFileIcon;
@@ -113,14 +114,17 @@ public class AddFileActivity extends AppCompatActivity implements View.OnClickLi
         try {
             // When an Image is picked
             if (requestCode == 101 && resultCode == RESULT_OK && null != data) {
+                Analytics.logEventGetImageFromDevice(this, SUCCESSFULLY_UPLOADED_IMAGE);
                 Uri selectedImage = data.getData();
                 bitmap = getBitmapFromUri(selectedImage);
                 ivFileIcon.setImageBitmap(bitmap);
             } else {
+                Analytics.logEventGetImageFromDevice(this, USER_DIDN_T_PICK_IMAGE);
                 Toast.makeText(this, R.string.havent_picked_image,
                         Toast.LENGTH_LONG).show();
             }
         } catch (Exception e) {
+            Analytics.logEventGetImageFromDevice(this, FAILED_TO_UPLOAD_IMAGE);
             Toast.makeText(this, R.string.something_went_wrong, Toast.LENGTH_LONG)
                     .show();
         }
@@ -209,11 +213,13 @@ public class AddFileActivity extends AppCompatActivity implements View.OnClickLi
     public void onInsertComplete(int token, Object cookie, Uri uri) {
         final String title = etTitle.getText().toString();
         if (uri == null) {
+            Analytics.logEventAddFileToDb(this, FAIL);
             Toast.makeText(AddFileActivity.this, R.string.failed_to_save_data, Toast.LENGTH_SHORT).show();
         } else {
             if (bitmap != null) {
                 saveImageBitmap(bitmap, title);
             }
+            Analytics.logEventAddFileToDb(this, SUCCESS);
             Toast.makeText(AddFileActivity.this, R.string.saved_successfully, Toast.LENGTH_SHORT).show();
         }
     }
