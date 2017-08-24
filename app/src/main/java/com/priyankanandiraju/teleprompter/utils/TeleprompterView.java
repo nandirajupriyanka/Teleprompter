@@ -78,7 +78,7 @@ public class TeleprompterView {
             textScrollSpeed = 10;
         }
 
-        return textScrollSpeed * 1000;
+        return textScrollSpeed * 5 * 1000;
     }
 
 }

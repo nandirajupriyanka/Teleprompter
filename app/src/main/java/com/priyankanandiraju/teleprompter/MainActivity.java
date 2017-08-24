@@ -1,15 +1,19 @@
 package com.priyankanandiraju.teleprompter;
 
+import android.Manifest;
 import android.app.LoaderManager;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
@@ -23,6 +27,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -45,6 +50,7 @@ import static com.priyankanandiraju.teleprompter.utils.Constants.SHARED_PREF_FIL
 public class MainActivity extends AppCompatActivity implements TeleprompterFilesAdapter.OnFileClickListener, LoaderManager.LoaderCallbacks<Cursor>{
 
     private static final String TAG = MainActivity.class.getSimpleName();
+    private static final int REQUEST_STORAGE_PERMISSION = 1;
 
     @BindView(R.id.fab)
     FloatingActionButton fabButton;
@@ -61,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements TeleprompterFiles
 
     private TeleprompterFilesAdapter mAdapter;
     private InterstitialAd mInterstitialAd;
+    private TeleprompterFile mDownloadedFile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -223,6 +230,44 @@ public class MainActivity extends AppCompatActivity implements TeleprompterFiles
                 startTeleprompterActivity(teleprompterFile);
             }
         });
+    }
+
+    @Override
+    public void onDownloadClick(TeleprompterFile teleprompterFile) {
+        Log.v(TAG, "onFileClick() " + teleprompterFile.toString());
+        mDownloadedFile = teleprompterFile;
+        // Check for the external storage permission
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+            // If you do not have permission, request it
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_STORAGE_PERMISSION);
+        } else {
+            // Download file
+            DownloadAsyncTask downloadAsyncTask = new DownloadAsyncTask(this, teleprompterFile);
+            downloadAsyncTask.execute();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        // Called when you request permission to read and write to external storage
+        switch (requestCode) {
+            case REQUEST_STORAGE_PERMISSION: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // If you get permission, download file
+                    // Download file
+                    DownloadAsyncTask downloadAsyncTask = new DownloadAsyncTask(this, mDownloadedFile);
+                    downloadAsyncTask.execute();
+                } else {
+                    // If you do not get permission, show a Toast
+                    Toast.makeText(this, R.string.permission_denied, Toast.LENGTH_SHORT).show();
+                }
+                break;
+            }
+        }
+
     }
 
     private void startTeleprompterActivity(final TeleprompterFile teleprompterFile) {

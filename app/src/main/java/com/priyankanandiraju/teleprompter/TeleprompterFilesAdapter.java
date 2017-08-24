@@ -9,6 +9,7 @@ import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -32,6 +33,7 @@ class TeleprompterFilesAdapter extends RecyclerView.Adapter<TeleprompterFilesAda
 
     public interface OnFileClickListener {
         void onFileClick(TeleprompterFile teleprompterFile);
+        void onDownloadClick(TeleprompterFile teleprompterFile);
     }
 
     public TeleprompterFilesAdapter(List<TeleprompterFile> teleprompterFiles, OnFileClickListener onFileClickListener) {
@@ -81,19 +83,29 @@ class TeleprompterFilesAdapter extends RecyclerView.Adapter<TeleprompterFilesAda
         TextView tvContent;
         @BindView(R.id.iv_file_icon)
         ImageView ivFileIcon;
+        @BindView(R.id.ib_download)
+        ImageButton ibDownload;
 
         public TeleprompterFilesHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
 
             itemView.setOnClickListener(this);
+            ibDownload.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             int adapterPosition = getAdapterPosition();
             TeleprompterFile teleprompterFile = mTeleprompterFileList.get(adapterPosition);
-            mOnFileClickListener.onFileClick(teleprompterFile);
+            switch (view.getId()) {
+                case R.id.ib_download:
+                    mOnFileClickListener.onDownloadClick(teleprompterFile);
+                    break;
+                default:
+                    mOnFileClickListener.onFileClick(teleprompterFile);
+                    break;
+            }
         }
     }
 }

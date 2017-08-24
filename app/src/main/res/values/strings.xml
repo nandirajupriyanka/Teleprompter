@@ -67,4 +67,8 @@
 
     <string name="banner_ad_unit_id">ca-app-pub-7180764529818538/5546539377</string>
     <string name="interstitial_ad_unit_id">ca-app-pub-7180764529818538/7408261861</string>
+    <string name="download_file">Download File</string>
+    <string name="permission_denied">Permission Denied</string>
+    <string name="download_success">Download successful</string>
+    <string name="download_fail">Download failed</string>
 </resources>
