@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name="TeleprompterApplication"
@@ -44,6 +44,7 @@
 
         <activity
             android:name=".SettingsActivity"
+            android:configChanges="orientation|screenSize"
             android:label="@string/settings"
             android:parentActivityName=".MainActivity">
             <meta-data
@@ -52,6 +53,7 @@
         </activity>
         <activity
             android:name=".AddFileActivity"
+            android:configChanges="orientation|screenSize"
             android:label="@string/add_a_file"
             android:parentActivityName=".MainActivity">
             <meta-data
