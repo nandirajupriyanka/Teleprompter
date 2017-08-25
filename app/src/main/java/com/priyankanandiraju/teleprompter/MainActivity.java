@@ -44,13 +44,15 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.priyankanandiraju.teleprompter.utils.Constants.DIALOG_TAG_LICENSES;
 import static com.priyankanandiraju.teleprompter.utils.Constants.EXTRA_FILE_DATA;
 import static com.priyankanandiraju.teleprompter.utils.Constants.SHARED_PREF_FILE;
 
-public class MainActivity extends AppCompatActivity implements TeleprompterFilesAdapter.OnFileClickListener, LoaderManager.LoaderCallbacks<Cursor>{
+public class MainActivity extends AppCompatActivity implements TeleprompterFilesAdapter.OnFileClickListener, LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int REQUEST_STORAGE_PERMISSION = 1;
+
 
     @BindView(R.id.fab)
     FloatingActionButton fabButton;
@@ -141,6 +143,9 @@ public class MainActivity extends AppCompatActivity implements TeleprompterFiles
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(intent);
             return true;
+        } else if (id == R.id.action_licenses) {
+            LicensesFragment dialog = LicensesFragment.newInstance();
+            dialog.show(getSupportFragmentManager(), DIALOG_TAG_LICENSES);
         }
 
         return super.onOptionsItemSelected(item);
@@ -175,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements TeleprompterFiles
         }
         tvEmpty.setVisibility(View.GONE);
         List<TeleprompterFile> teleprompterFileList = new ArrayList<>();
-        for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
             // The Cursor is now set to the right position
             int titleColumnIndex = cursor.getColumnIndex(TeleprompterFileEvent.COLUMN_FILE_TITLE);
             int contentColumnIndex = cursor.getColumnIndex(TeleprompterFileEvent.COLUMN_FILE_CONTENT);

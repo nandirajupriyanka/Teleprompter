@@ -13,8 +13,7 @@ import android.support.v7.preference.PreferenceScreen;
  */
 
 public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
-
-    // TODO: 8/13/17 License for Circle image
+    
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.pref_teleprompter);

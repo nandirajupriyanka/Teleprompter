@@ -71,4 +71,6 @@
     <string name="permission_denied">Permission Denied</string>
     <string name="download_success">Download successful</string>
     <string name="download_fail">Download failed</string>
+    <string name="licenses">Licenses</string>
+
 </resources>
