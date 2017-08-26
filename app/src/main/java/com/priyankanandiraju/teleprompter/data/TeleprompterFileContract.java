@@ -13,7 +13,7 @@ public class TeleprompterFileContract {
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
     public static final String PATH_TELEPROMPTER_FILES = "teleprompterFiles";
 
-    public TeleprompterFileContract() {
+    private TeleprompterFileContract() {
     }
 
     public static final class TeleprompterFileEvent implements BaseColumns {
