@@ -25,6 +25,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,7 +49,7 @@ import static com.priyankanandiraju.teleprompter.utils.Constants.DIALOG_TAG_LICE
 import static com.priyankanandiraju.teleprompter.utils.Constants.EXTRA_FILE_DATA;
 import static com.priyankanandiraju.teleprompter.utils.Constants.SHARED_PREF_FILE;
 
-public class MainActivity extends AppCompatActivity implements TeleprompterFilesAdapter.OnFileClickListener, LoaderManager.LoaderCallbacks<Cursor> {
+public class MainActivity extends AppCompatActivity implements TeleprompterFilesAdapter.OnFileClickListener, LoaderManager.LoaderCallbacks<Cursor>, PopupMenu.OnMenuItemClickListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int REQUEST_STORAGE_PERMISSION = 1;
@@ -112,8 +113,7 @@ public class MainActivity extends AppCompatActivity implements TeleprompterFiles
         fabButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, AddFileActivity.class);
-                startActivity(intent);
+                showOptionsPopup(view);
             }
         });
 
@@ -279,5 +279,29 @@ public class MainActivity extends AppCompatActivity implements TeleprompterFiles
         Intent intent = new Intent(this, TeleprompterActivity.class);
         intent.putExtra(EXTRA_FILE_DATA, teleprompterFile);
         startActivity(intent);
+    }
+
+    public void showOptionsPopup(View view) {
+        PopupMenu popup = new PopupMenu(this, view);
+        popup.setOnMenuItemClickListener(this);
+        popup.inflate(R.menu.floating_button_menu_options);
+        popup.show();
+    }
+
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_capture_image:
+                // TODO: 11/12/17 Open Camera to Capture image and perform text mining.
+                return true;
+            case R.id.menu_add_file:
+                // Open AddFileActivity
+                Intent intent = new Intent(MainActivity.this, AddFileActivity.class);
+                startActivity(intent);
+                return true;
+            default:
+                return false;
+        }
     }
 }
