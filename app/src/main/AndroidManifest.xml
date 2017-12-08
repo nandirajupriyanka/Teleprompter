@@ -89,6 +89,15 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/teleprompter_widget_info" />
         </receiver>
+
+        <activity android:name=".OcrCaptureActivity"
+            android:label="@string/extract_text"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+
     </application>
 
 </manifest>

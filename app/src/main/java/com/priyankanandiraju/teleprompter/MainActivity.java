@@ -291,13 +291,16 @@ public class MainActivity extends AppCompatActivity implements TeleprompterFiles
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
+        Intent intent;
         switch (item.getItemId()) {
             case R.id.menu_capture_image:
-                // TODO: 11/12/17 Open Camera to Capture image and perform text mining.
+                // Text Recognition.
+                intent = new Intent(MainActivity.this, OcrCaptureActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.menu_add_file:
                 // Open AddFileActivity
-                Intent intent = new Intent(MainActivity.this, AddFileActivity.class);
+                intent = new Intent(MainActivity.this, AddFileActivity.class);
                 startActivity(intent);
                 return true;
             default:

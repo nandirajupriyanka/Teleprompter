@@ -65,7 +65,6 @@
     <string name="title">Title</string>
     <string name="content">Content</string>
 
-
     <string name="banner_ad_unit_id">ca-app-pub-7180764529818538/5546539377</string>
     <string name="interstitial_ad_unit_id">ca-app-pub-7180764529818538/7408261861</string>
     <string name="download_file">Download File</string>
@@ -73,5 +72,11 @@
     <string name="download_success">Download successful</string>
     <string name="download_fail">Download failed</string>
     <string name="licenses">Licenses</string>
+
+    <string name="extract_text">Extract Text</string>
+    <string name="ok">OK</string>
+    <string name="low_storage_error">Text cannot be extracted due to low device storage</string>
+    <string name="no_camera_permission">Please provide camera permissions to access this feature.</string>
+    <string name="permission_camera_rationale">Access to the camera is needed for extracting text</string>
 
 </resources>
