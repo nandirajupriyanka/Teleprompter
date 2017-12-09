@@ -34,6 +34,7 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.gson.Gson;
 import com.priyankanandiraju.teleprompter.data.TeleprompterFileContract.TeleprompterFileEvent;
 import com.priyankanandiraju.teleprompter.helper.DeviceConfig;
@@ -47,12 +48,14 @@ import butterknife.ButterKnife;
 
 import static com.priyankanandiraju.teleprompter.utils.Constants.DIALOG_TAG_LICENSES;
 import static com.priyankanandiraju.teleprompter.utils.Constants.EXTRA_FILE_DATA;
+import static com.priyankanandiraju.teleprompter.utils.Constants.INTENT_EXTRA_CONTENT;
 import static com.priyankanandiraju.teleprompter.utils.Constants.SHARED_PREF_FILE;
 
 public class MainActivity extends AppCompatActivity implements TeleprompterFilesAdapter.OnFileClickListener, LoaderManager.LoaderCallbacks<Cursor>, PopupMenu.OnMenuItemClickListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int REQUEST_STORAGE_PERMISSION = 1;
+    private static final int RC_OCR_CAPTURE = 9003;
 
 
     @BindView(R.id.fab)
@@ -296,7 +299,7 @@ public class MainActivity extends AppCompatActivity implements TeleprompterFiles
             case R.id.menu_capture_image:
                 // Text Recognition.
                 intent = new Intent(MainActivity.this, OcrCaptureActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, RC_OCR_CAPTURE);
                 return true;
             case R.id.menu_add_file:
                 // Open AddFileActivity
@@ -305,6 +308,30 @@ public class MainActivity extends AppCompatActivity implements TeleprompterFiles
                 return true;
             default:
                 return false;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == RC_OCR_CAPTURE) {
+            if (resultCode == CommonStatusCodes.SUCCESS) {
+                Intent intent = new Intent(MainActivity.this, AddFileActivity.class);
+                if (data != null) {
+                    String text = data.getStringExtra(OcrCaptureActivity.TextBlockObject);
+                    Toast.makeText(this, R.string.ocr_success, Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "Text read: " + text);
+                    intent.putExtra(INTENT_EXTRA_CONTENT, text);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(this, R.string.ocr_failure, Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "No Text captured, intent data is null");
+                }
+            } else {
+                Toast.makeText(this, String.format(getString(R.string.ocr_error),
+                        CommonStatusCodes.getStatusCodeString(resultCode)), Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 }

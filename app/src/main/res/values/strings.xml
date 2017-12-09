@@ -78,5 +78,8 @@
     <string name="low_storage_error">Text cannot be extracted due to low device storage</string>
     <string name="no_camera_permission">Please provide camera permissions to access this feature.</string>
     <string name="permission_camera_rationale">Access to the camera is needed for extracting text</string>
+    <string name="ocr_success">Text read successfully</string>
+    <string name="ocr_failure">No text captured</string>
+    <string name="ocr_error">"Error reading text: %1$s"</string>
 
 </resources>

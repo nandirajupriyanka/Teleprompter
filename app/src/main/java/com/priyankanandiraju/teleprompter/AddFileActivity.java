@@ -38,6 +38,7 @@ import butterknife.ButterKnife;
 
 import static com.priyankanandiraju.teleprompter.analytics.AnalyticsConstant.*;
 import static com.priyankanandiraju.teleprompter.utils.Constants.IMAGE_DATA;
+import static com.priyankanandiraju.teleprompter.utils.Constants.INTENT_EXTRA_CONTENT;
 
 public class AddFileActivity extends AppCompatActivity implements View.OnClickListener, TextWatcher, QueryHandler.onQueryHandlerInsertComplete {
 
@@ -62,6 +63,12 @@ public class AddFileActivity extends AppCompatActivity implements View.OnClickLi
         ActionBar actionBar = this.getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
+        // read parameters from the intent used to launch the activity.
+        if (getIntent() != null && getIntent().hasExtra(INTENT_EXTRA_CONTENT)) {
+            String content = getIntent().getStringExtra(INTENT_EXTRA_CONTENT);
+            etContent.setText(content);
         }
 
         etTitle.addTextChangedListener(this);

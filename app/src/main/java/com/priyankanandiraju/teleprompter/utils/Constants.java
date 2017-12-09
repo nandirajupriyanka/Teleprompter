@@ -11,4 +11,5 @@ public class Constants {
     public static final String TXT_EXTENSION = ".txt";
     public static final String PATH_LICENSES_FILE = "file:///android_asset/licenses.html";
     public static final String DIALOG_TAG_LICENSES = "DIALOG_TAG_LICENSES";
+    public static final String INTENT_EXTRA_CONTENT = "content";
 }
