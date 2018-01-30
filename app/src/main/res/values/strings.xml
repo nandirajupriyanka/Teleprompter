@@ -51,7 +51,7 @@
     <string name="enter_title_here">Enter title here</string>
     <string name="enter_content_here">Enter content here</string>
     <string name="save">Save</string>
-    <string name="cancel">Cancel</string>
+    <string name="clear">Clear</string>
     <string name="select_file_icon">Select File Icon</string>
     <string name="failed_to_save_data">Failed to save data</string>
     <string name="saved_successfully">Saved successfully</string>
