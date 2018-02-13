@@ -2,12 +2,15 @@ package com.priyankanandiraju.teleprompter;
 
 import android.Manifest;
 import android.app.LoaderManager;
+import android.content.ContentUris;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,6 +18,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.GridLayoutManager;
@@ -38,6 +42,7 @@ import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.gson.Gson;
 import com.priyankanandiraju.teleprompter.data.TeleprompterFileContract.TeleprompterFileEvent;
 import com.priyankanandiraju.teleprompter.helper.DeviceConfig;
+import com.priyankanandiraju.teleprompter.utils.QueryDeleteHandler;
 import com.priyankanandiraju.teleprompter.utils.TeleprompterFile;
 
 import java.util.ArrayList;
@@ -51,7 +56,8 @@ import static com.priyankanandiraju.teleprompter.utils.Constants.EXTRA_FILE_DATA
 import static com.priyankanandiraju.teleprompter.utils.Constants.INTENT_EXTRA_CONTENT;
 import static com.priyankanandiraju.teleprompter.utils.Constants.SHARED_PREF_FILE;
 
-public class MainActivity extends AppCompatActivity implements TeleprompterFilesAdapter.OnFileClickListener, LoaderManager.LoaderCallbacks<Cursor>, PopupMenu.OnMenuItemClickListener {
+public class MainActivity extends AppCompatActivity implements TeleprompterFilesAdapter.OnFileClickListener,
+        LoaderManager.LoaderCallbacks<Cursor>, PopupMenu.OnMenuItemClickListener, QueryDeleteHandler.onQueryHandlerDeleteComplete {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int REQUEST_STORAGE_PERMISSION = 1;
@@ -179,20 +185,25 @@ public class MainActivity extends AppCompatActivity implements TeleprompterFiles
         if (cursor == null || cursor.getCount() < 1) {
             tvEmpty.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.INVISIBLE);
+            rvTeleprompterFiles.setVisibility(View.GONE);
             return;
         }
         tvEmpty.setVisibility(View.GONE);
+        rvTeleprompterFiles.setVisibility(View.VISIBLE);
         List<TeleprompterFile> teleprompterFileList = new ArrayList<>();
         for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
             // The Cursor is now set to the right position
+            int idColumnIndex = cursor.getColumnIndex(TeleprompterFileEvent._ID);
             int titleColumnIndex = cursor.getColumnIndex(TeleprompterFileEvent.COLUMN_FILE_TITLE);
             int contentColumnIndex = cursor.getColumnIndex(TeleprompterFileEvent.COLUMN_FILE_CONTENT);
 
             // Extract out the value from the Cursor for the given column index
+            String id = cursor.getString(idColumnIndex);
             String title = cursor.getString(titleColumnIndex);
             String content = cursor.getString(contentColumnIndex);
 
             TeleprompterFile teleprompterFile = new TeleprompterFile();
+            teleprompterFile.setId(id);
             teleprompterFile.setTitle(title);
             teleprompterFile.setContent(content);
             teleprompterFileList.add(teleprompterFile);
@@ -258,6 +269,12 @@ public class MainActivity extends AppCompatActivity implements TeleprompterFiles
     }
 
     @Override
+    public void onDeleteClick(int position, TeleprompterFile teleprompterFile) {
+        Log.v(TAG, "onDeleteClick " + teleprompterFile.toString());
+        showDeleteConfirmationDialog(position, teleprompterFile);
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         // Called when you request permission to read and write to external storage
         switch (requestCode) {
@@ -291,6 +308,32 @@ public class MainActivity extends AppCompatActivity implements TeleprompterFiles
         popup.show();
     }
 
+    private void showDeleteConfirmationDialog(final int position, final TeleprompterFile teleprompterFile) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.delete_this_item);
+        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                deleteItem(position, teleprompterFile);
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        // Create and show the AlertDialog
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    private void deleteItem(int position, TeleprompterFile teleprompterFile) {
+        QueryDeleteHandler queryDeleteHandler = new QueryDeleteHandler(getContentResolver(), MainActivity.this);
+        Uri uriToDelete = TeleprompterFileEvent.CONTENT_URI.buildUpon().appendPath(teleprompterFile.getId()).build();
+        queryDeleteHandler.startDelete(position, null, uriToDelete, null, null);
+    }
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
@@ -332,6 +375,17 @@ public class MainActivity extends AppCompatActivity implements TeleprompterFiles
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
+    public void onDeleteComplete(int token, Object cookie, int result) {
+        Log.v(TAG, "onDeleteComplete result" + result);
+        if (result == 0) {
+            Toast.makeText(this, R.string.delete_failed, Toast.LENGTH_SHORT).show();
+        } else {
+            // Otherwise, the delete was successful and we can display a toast.
+            Toast.makeText(this, R.string.delete_successful, Toast.LENGTH_SHORT).show();
         }
     }
 }

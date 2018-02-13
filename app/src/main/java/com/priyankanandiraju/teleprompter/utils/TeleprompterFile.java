@@ -19,6 +19,7 @@ public class TeleprompterFile implements Parcelable {
             return new TeleprompterFile[size];
         }
     };
+    private String id;
     private String title;
     private String content;
 
@@ -26,12 +27,14 @@ public class TeleprompterFile implements Parcelable {
     }
 
     protected TeleprompterFile(Parcel in) {
+        id = in.readString();
         title = in.readString();
         content = in.readString();
     }
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
         dest.writeString(title);
         dest.writeString(content);
     }
@@ -57,9 +60,18 @@ public class TeleprompterFile implements Parcelable {
         this.content = content;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
+    }
+
     @Override
     public String toString() {
         return "TeleprompterFile{" +
+                "id='" + id + '\'' +
                 "title='" + title + '\'' +
                 ", content='" + content + '\'' +
                 '}';

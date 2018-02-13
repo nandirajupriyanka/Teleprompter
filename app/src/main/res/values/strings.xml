@@ -53,7 +53,7 @@
     <string name="save">Save</string>
     <string name="clear">Clear</string>
     <string name="select_file_icon">Select File Icon</string>
-    <string name="failed_to_save_data">Failed to save data</string>
+    <string name="failed_to_save_data">Failed to save data. Please try later</string>
     <string name="saved_successfully">Saved successfully</string>
     <string name="play">Play</string>
     <string name="select_picture">Select picture</string>
@@ -70,7 +70,7 @@
     <string name="download_file">Download File</string>
     <string name="permission_denied">Permission Denied</string>
     <string name="download_success">Download successful</string>
-    <string name="download_fail">Download failed</string>
+    <string name="download_fail">Download failed. Please try later</string>
     <string name="licenses">Licenses</string>
 
     <string name="extract_text">Extract Text</string>
@@ -79,7 +79,13 @@
     <string name="no_camera_permission">Please provide camera permissions to access this feature.</string>
     <string name="permission_camera_rationale">Access to the camera is needed for extracting text</string>
     <string name="ocr_success">Text read successfully</string>
-    <string name="ocr_failure">No text captured</string>
+    <string name="ocr_failure">No text captured.</string>
     <string name="ocr_error">"Error reading text: %1$s"</string>
+    <string name="delete_file">Delete File</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete_this_item">Are you sure you want to delete this item?</string>
+    <string name="delete_failed">Deletion Failed. Please try later</string>
+    <string name="delete_successful">Delete successful</string>
 
 </resources>
