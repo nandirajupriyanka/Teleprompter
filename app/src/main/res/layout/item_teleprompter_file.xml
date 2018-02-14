@@ -69,31 +69,37 @@
                         tools:text="@string/content" />
                 </LinearLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_gravity="end"
-                android:layout_margin="8dp">
+                android:layout_margin="8dp"
+                android:orientation="horizontal">
+
                 <ImageButton
                     android:id="@+id/ib_edit"
+                    style="?android:buttonBarButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/edit_file"
-                    android:src="@android:drawable/ic_menu_edit"/>
+                    android:src="@drawable/ic_edit" />
+
                 <ImageButton
                     android:id="@+id/ib_delete"
+                    style="?android:buttonBarButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/delete_file"
-                    android:src="@android:drawable/ic_menu_delete"/>
+                    android:src="@drawable/ic_delete" />
 
                 <ImageButton
                     android:id="@+id/ib_download"
+                    style="?android:buttonBarButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/download_file"
-                    android:src="@android:drawable/stat_sys_download"/>
+                    android:src="@drawable/ic_download" />
             </LinearLayout>
 
         </LinearLayout>
