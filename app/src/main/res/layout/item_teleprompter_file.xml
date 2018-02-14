@@ -76,6 +76,12 @@
                 android:layout_gravity="end"
                 android:layout_margin="8dp">
                 <ImageButton
+                    android:id="@+id/ib_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/edit_file"
+                    android:src="@android:drawable/ic_menu_edit"/>
+                <ImageButton
                     android:id="@+id/ib_delete"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

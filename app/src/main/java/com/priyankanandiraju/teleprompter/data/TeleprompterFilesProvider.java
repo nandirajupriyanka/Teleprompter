@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.priyankanandiraju.teleprompter.data.TeleprompterFileContract.TeleprompterFileEvent;
+import com.priyankanandiraju.teleprompter.utils.TeleprompterFile;
 
 /**
  * Created by priyankanandiraju on 8/2/17.
@@ -129,7 +130,51 @@ public class TeleprompterFilesProvider extends ContentProvider {
     }
 
     @Override
-    public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
-        return 0;
+    public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String selection, @Nullable String[] selectionArgs) {
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case TELEPROMPTER_FILES:
+                return updateTeleprompterFile(uri, contentValues, selection, selectionArgs);
+            case TELEPROMPTER_FILE_ITEM:
+                selection = TeleprompterFileEvent._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                return updateTeleprompterFile(uri, contentValues, selection, selectionArgs);
+            default:
+                throw new IllegalArgumentException("Update is not supported for " + uri);
+        }
+    }
+
+    private int updateTeleprompterFile(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
+        /*if (contentValues.containsKey(TeleprompterFileEvent.COLUMN_FILE_IMAGE)) {
+            Integer image = contentValues.getAsInteger(TeleprompterFileEvent.COLUMN_FILE_IMAGE);
+            if (image == null) {
+                throw new IllegalArgumentException("File requires a image");
+            }
+        }*/
+
+        if (contentValues.containsKey(TeleprompterFileEvent.COLUMN_FILE_TITLE)) {
+            String title = contentValues.getAsString(TeleprompterFileEvent.COLUMN_FILE_TITLE);
+            if (title == null) {
+                throw new IllegalArgumentException("File requires a title");
+            }
+        }
+        if (contentValues.containsKey(TeleprompterFileEvent.COLUMN_FILE_CONTENT)) {
+            String content = contentValues.getAsString(TeleprompterFileEvent.COLUMN_FILE_CONTENT);
+            if (content == null) {
+                throw new IllegalArgumentException("File requires content");
+            }
+        }
+        if (contentValues.size() == 0) {
+            return 0;
+        }
+
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+
+        int rowsUpdated = database.update(TeleprompterFileEvent.TABLE_NAME, contentValues, selection, selectionArgs);
+        if (rowsUpdated != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        return rowsUpdated;
     }
 }

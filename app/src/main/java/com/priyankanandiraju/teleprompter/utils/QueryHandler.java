@@ -16,6 +16,7 @@ public class QueryHandler extends AsyncQueryHandler {
 
     public interface onQueryHandlerInsertComplete {
         void onInsertComplete(int token, Object cookie, Uri uri);
+        void onUpdateComplete(int token, Object cookie, int result);
     }
     public QueryHandler(ContentResolver cr) {
         super(cr);
@@ -30,6 +31,13 @@ public class QueryHandler extends AsyncQueryHandler {
     protected void onInsertComplete(int token, Object cookie, Uri uri) {
         if (mOnQueryHandlerInsertComplete != null) {
             mOnQueryHandlerInsertComplete.onInsertComplete(token, cookie, uri);
+        }
+    }
+
+    @Override
+    protected void onUpdateComplete(int token, Object cookie, int result) {
+        if (mOnQueryHandlerInsertComplete != null) {
+            mOnQueryHandlerInsertComplete.onUpdateComplete(token, cookie, result);
         }
     }
 }

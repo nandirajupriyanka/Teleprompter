@@ -1,8 +1,12 @@
 package com.priyankanandiraju.teleprompter;
 
+import android.app.LoaderManager;
 import android.content.ContentValues;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -26,12 +30,15 @@ import android.widget.Toast;
 import com.priyankanandiraju.teleprompter.analytics.Analytics;
 import com.priyankanandiraju.teleprompter.data.TeleprompterFileContract.TeleprompterFileEvent;
 import com.priyankanandiraju.teleprompter.utils.QueryHandler;
+import com.priyankanandiraju.teleprompter.utils.TeleprompterFile;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,7 +47,7 @@ import static com.priyankanandiraju.teleprompter.analytics.AnalyticsConstant.*;
 import static com.priyankanandiraju.teleprompter.utils.Constants.IMAGE_DATA;
 import static com.priyankanandiraju.teleprompter.utils.Constants.INTENT_EXTRA_CONTENT;
 
-public class AddFileActivity extends AppCompatActivity implements View.OnClickListener, TextWatcher, QueryHandler.onQueryHandlerInsertComplete {
+public class AddFileActivity extends AppCompatActivity implements View.OnClickListener, TextWatcher, QueryHandler.onQueryHandlerInsertComplete, LoaderManager.LoaderCallbacks<Cursor> {
 
     @BindView(R.id.iv_file_icon)
     ImageView ivFileIcon;
@@ -53,6 +60,7 @@ public class AddFileActivity extends AppCompatActivity implements View.OnClickLi
     @BindView(R.id.btn_cancel)
     Button btnCancel;
     private Bitmap bitmap = null;
+    private Uri mCurrentUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,10 +74,22 @@ public class AddFileActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         // read parameters from the intent used to launch the activity.
-        if (getIntent() != null && getIntent().hasExtra(INTENT_EXTRA_CONTENT)) {
-            String content = getIntent().getStringExtra(INTENT_EXTRA_CONTENT);
-            etContent.setText(content);
+        Intent intent = getIntent();
+        if (intent != null) {
+            if (intent.hasExtra(INTENT_EXTRA_CONTENT)) {
+                String content = intent.getStringExtra(INTENT_EXTRA_CONTENT);
+                etContent.setText(content);
+            }
+            mCurrentUri = intent.getData();
         }
+
+        if (mCurrentUri == null) {
+            setTitle(getString(R.string.add_a_file));
+        } else {
+            setTitle(R.string.edit_a_file);
+            getLoaderManager().initLoader(0, null, this);
+        }
+
 
         etTitle.addTextChangedListener(this);
         etContent.addTextChangedListener(this);
@@ -157,7 +177,11 @@ public class AddFileActivity extends AppCompatActivity implements View.OnClickLi
         contentValues.put(TeleprompterFileEvent.COLUMN_FILE_CONTENT, content);
         contentValues.put(TeleprompterFileEvent.COLUMN_FILE_IMAGE, android.R.drawable.ic_menu_camera);
 
-        queryHandler.startInsert(1, null, TeleprompterFileEvent.CONTENT_URI, contentValues);
+        if (mCurrentUri == null) {
+            queryHandler.startInsert(1, null, TeleprompterFileEvent.CONTENT_URI, contentValues);
+        } else {
+            queryHandler.startUpdate(1, null, mCurrentUri, contentValues, null, null);
+        }
     }
 
     private Bitmap saveImageBitmap(Bitmap thumbnail, String nameString) {
@@ -229,5 +253,80 @@ public class AddFileActivity extends AppCompatActivity implements View.OnClickLi
             Analytics.logEventAddFileToDb(this, SUCCESS);
             Toast.makeText(AddFileActivity.this, R.string.saved_successfully, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onUpdateComplete(int token, Object cookie, int result) {
+        final String title = etTitle.getText().toString();
+        if (result == 0) {
+            // If no rows were affected, then there was an error with the update.
+            Toast.makeText(this, R.string.update_failed,
+                    Toast.LENGTH_SHORT).show();
+        } else {
+            // Otherwise, the update was successful and we can display a toast.
+            saveImageBitmap(bitmap, title);
+            Toast.makeText(this, R.string.update_successful,
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
+        String projection[] = {
+                TeleprompterFileEvent._ID,
+                TeleprompterFileEvent.COLUMN_FILE_TITLE,
+                TeleprompterFileEvent.COLUMN_FILE_CONTENT,
+                TeleprompterFileEvent.COLUMN_FILE_IMAGE,
+                TeleprompterFileEvent.COLUMN_FILE_IS_FAV,
+        };
+        return new CursorLoader(this,
+                TeleprompterFileEvent.CONTENT_URI,
+                projection,
+                null,
+                null,
+                null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        if (cursor == null || cursor.getCount() < 1) {
+            return;
+        }
+        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+            // The Cursor is now set to the right position
+            int idColumnIndex = cursor.getColumnIndex(TeleprompterFileEvent._ID);
+            int titleColumnIndex = cursor.getColumnIndex(TeleprompterFileEvent.COLUMN_FILE_TITLE);
+            int contentColumnIndex = cursor.getColumnIndex(TeleprompterFileEvent.COLUMN_FILE_CONTENT);
+
+            // Extract out the value from the Cursor for the given column index
+            String id = cursor.getString(idColumnIndex);
+            String title = cursor.getString(titleColumnIndex);
+            String content = cursor.getString(contentColumnIndex);
+
+            etTitle.setText(title);
+            etContent.setText(content);
+            setImage();
+        }
+    }
+
+    private void setImage() {
+        if (mCurrentUri != null) {
+            String nameString = etTitle.getText().toString().trim();
+            SharedPreferences shre = PreferenceManager.getDefaultSharedPreferences(this);
+            String previouslyEncodedImage = shre.getString(IMAGE_DATA + nameString, "");
+            if (!previouslyEncodedImage.equalsIgnoreCase("")) {
+                byte[] b = Base64.decode(previouslyEncodedImage, Base64.DEFAULT);
+                bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
+                ivFileIcon.setImageBitmap(bitmap);
+            }
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        etTitle.setText("");
+        etContent.setText("");
+        ivFileIcon.setImageBitmap(null);
+        bitmap = null;
     }
 }

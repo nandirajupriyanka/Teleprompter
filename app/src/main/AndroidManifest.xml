@@ -61,7 +61,6 @@
         <activity
             android:name=".AddFileActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/add_a_file"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

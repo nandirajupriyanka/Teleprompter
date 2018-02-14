@@ -275,6 +275,19 @@ public class MainActivity extends AppCompatActivity implements TeleprompterFiles
     }
 
     @Override
+    public void onEditClick(TeleprompterFile teleprompterFile) {
+        Log.v(TAG, "onEditClick " + teleprompterFile.toString());
+        openAddFileActivityWithExtras(teleprompterFile);
+    }
+
+    private void openAddFileActivityWithExtras(TeleprompterFile teleprompterFile) {
+        Intent intent = new Intent(MainActivity.this, AddFileActivity.class);
+        Uri currentItemUri = ContentUris.withAppendedId(TeleprompterFileEvent.CONTENT_URI, Long.parseLong(teleprompterFile.getId()));
+        intent.setData(currentItemUri);
+        startActivity(intent);
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         // Called when you request permission to read and write to external storage
         switch (requestCode) {

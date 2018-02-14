@@ -35,6 +35,7 @@ class TeleprompterFilesAdapter extends RecyclerView.Adapter<TeleprompterFilesAda
         void onFileClick(TeleprompterFile teleprompterFile);
         void onDownloadClick(TeleprompterFile teleprompterFile);
         void onDeleteClick(int position, TeleprompterFile teleprompterFile);
+        void onEditClick(TeleprompterFile teleprompterFile);
     }
 
     public TeleprompterFilesAdapter(List<TeleprompterFile> teleprompterFiles, OnFileClickListener onFileClickListener) {
@@ -88,6 +89,8 @@ class TeleprompterFilesAdapter extends RecyclerView.Adapter<TeleprompterFilesAda
         ImageButton ibDownload;
         @BindView(R.id.ib_delete)
         ImageButton ibDelete;
+        @BindView(R.id.ib_edit)
+        ImageButton ibEdit;
 
 
         public TeleprompterFilesHolder(View itemView) {
@@ -97,6 +100,7 @@ class TeleprompterFilesAdapter extends RecyclerView.Adapter<TeleprompterFilesAda
             itemView.setOnClickListener(this);
             ibDownload.setOnClickListener(this);
             ibDelete.setOnClickListener(this);
+            ibEdit.setOnClickListener(this);
         }
 
         @Override
@@ -109,6 +113,9 @@ class TeleprompterFilesAdapter extends RecyclerView.Adapter<TeleprompterFilesAda
                     break;
                 case R.id.ib_delete:
                     mOnFileClickListener.onDeleteClick(getAdapterPosition(), teleprompterFile);
+                    break;
+                case R.id.ib_edit:
+                    mOnFileClickListener.onEditClick(teleprompterFile);
                     break;
                 default:
                     mOnFileClickListener.onFileClick(teleprompterFile);
