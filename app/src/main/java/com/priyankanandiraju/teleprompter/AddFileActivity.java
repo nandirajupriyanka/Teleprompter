@@ -13,6 +13,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -30,20 +32,21 @@ import android.widget.Toast;
 import com.priyankanandiraju.teleprompter.analytics.Analytics;
 import com.priyankanandiraju.teleprompter.data.TeleprompterFileContract.TeleprompterFileEvent;
 import com.priyankanandiraju.teleprompter.utils.QueryHandler;
-import com.priyankanandiraju.teleprompter.utils.TeleprompterFile;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.priyankanandiraju.teleprompter.analytics.AnalyticsConstant.*;
+import static com.priyankanandiraju.teleprompter.analytics.AnalyticsConstant.FAIL;
+import static com.priyankanandiraju.teleprompter.analytics.AnalyticsConstant.FAILED_TO_UPLOAD_IMAGE;
+import static com.priyankanandiraju.teleprompter.analytics.AnalyticsConstant.SUCCESS;
+import static com.priyankanandiraju.teleprompter.analytics.AnalyticsConstant.SUCCESSFULLY_UPLOADED_IMAGE;
+import static com.priyankanandiraju.teleprompter.analytics.AnalyticsConstant.USER_DIDN_T_PICK_IMAGE;
 import static com.priyankanandiraju.teleprompter.utils.Constants.IMAGE_DATA;
 import static com.priyankanandiraju.teleprompter.utils.Constants.INTENT_EXTRA_CONTENT;
 
@@ -59,6 +62,7 @@ public class AddFileActivity extends AppCompatActivity implements View.OnClickLi
     Button btnSave;
     @BindView(R.id.btn_cancel)
     Button btnCancel;
+    @Nullable
     private Bitmap bitmap = null;
     private Uri mCurrentUri;
 
@@ -184,7 +188,7 @@ public class AddFileActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    private Bitmap saveImageBitmap(Bitmap thumbnail, String nameString) {
+    private Bitmap saveImageBitmap(@NonNull Bitmap thumbnail, String nameString) {
         // Removing image saved earlier in shared preferences
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor edit = sharedPref.edit();
@@ -264,7 +268,9 @@ public class AddFileActivity extends AppCompatActivity implements View.OnClickLi
                     Toast.LENGTH_SHORT).show();
         } else {
             // Otherwise, the update was successful and we can display a toast.
-            saveImageBitmap(bitmap, title);
+            if (bitmap != null) {
+                saveImageBitmap(bitmap, title);
+            }
             Toast.makeText(this, R.string.update_successful,
                     Toast.LENGTH_SHORT).show();
         }
