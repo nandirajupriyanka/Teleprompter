@@ -8,7 +8,7 @@ import com.priyankanandiraju.teleprompter.helper.DeviceConfig;
  * Created by priyankanandiraju on 8/20/17.
  */
 
-public class TeleprompterApplication extends Application {
+public class PocketPrompterApplication extends Application {
 
     @Override
     public void onCreate() {

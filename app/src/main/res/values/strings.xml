@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Teleprompter</string>
+    <string name="app_name">PocketPrompter</string>
     <string name="action_settings">Settings</string>
 
     <string name="speed">Speed</string>
